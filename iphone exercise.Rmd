@@ -1,0 +1,62 @@
+---
+title: "Iphone at Google Trend"
+author: "Carles"
+date: "29th  November 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Google Trend
+
+```{r}
+#install.packages("gtrendsR")
+#install.packages("tidyverse")
+
+library(gtrendsR)
+library(ggplot2)
+library(tidyverse)
+
+
+```
+
+
+```{r}
+iphone.trend <- gtrends(c("iphone"), gprop = "web", time = "all")[[1]] #To see the trend of bitcoin on Google Trend
+```
+
+
+```{r}
+class(iphone.trend) #it is a data frame
+head(iphone.trend) #gives the values of the trend since 2004
+
+```
+
+The iPhone was created in 2007. Because of that new product is really recent, there is not data before 2007. In the plot, we can also see the stationality. Arround 2012, se can see that there is an explotion in the search, and since that momnet the stationality becomes huge
+
+```{r}
+class(iphone.trend$date) #in that column we have the date (month)
+
+ggplot(data = iphone.trend) + geom_line(mapping = aes(x= date, y = hits)) #plots the evolution of the bicoins
+
+
+```
+
+Because during 2005 and 2007, there was not iPhone, that is why there is no data about it.
+
+
+```{r}
+iphone.trend <- iphone.trend %>% filter(date >= as.Date("2007-01-01")) 
+```
+
+
+For the iphone presented in 2011, more people become interested on that smartphone
+```{r}
+ggplot(data = iphone.trend) + 
+  geom_line(mapping = aes(x= date, y = hits)) +
+  geom_vline(xintercept = as.Date("2011-09-01"), color = "red")
+
+```
+
